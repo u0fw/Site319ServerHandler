@@ -1,0 +1,46 @@
+local PlayerTable = {}
+
+local Players = game:GetService('Players')
+local ReplicatedStorage = game:GetService('ReplicatedStorage')
+local DataStorage = game:GetService('DataStoreService')
+
+local CreditsKey = 'X8o9b3EbmM3k4KAf5'
+
+function GetPlayerCount()
+	local PlayerCount = 0 
+	for i,v in pairs(PlayerTable) do
+		PlayerCount = PlayerCount + 1
+	end
+	return PlayerCount
+end
+function GetDataStore(Player,Key)
+	local DataStore = DataStorage:GetOrderedDataStore(Key)
+	local Data = nil
+	local UserCreditsKey = Player.PlayerId
+	pcall(function()
+		Data = DataStore:GetAsync(PlayerId)
+	end)
+	if Data then
+		return Data
+	else
+		Data = 0
+		return Data
+	end
+end
+function WriteDataStore(Player,Key)
+	local DataStore = 
+end
+Players.PlayerAdded:Connect(function(Player)
+	local PlayerCount = GetPlayerCount()
+	local CreditsCount = GetPlayerCount(Player,CreditsKey)
+	local PlayerInfo = {[Player.Name] = {CreditsCount,Player}}
+	table.insert(PlayerTable,PlayerCount,PlayerInfo)
+	
+end)
+Players.PlayerRemoving:Connect(function(Player)
+	local Data = nil
+	for i,v in pairs(PlayerTable) do
+		
+	end
+	table.remove(PlayerTable[Player.Name])
+end)
