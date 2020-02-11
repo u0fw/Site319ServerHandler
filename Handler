@@ -6,6 +6,25 @@ local DataStorage = game:GetService('DataStoreService')
 
 local CreditsKey = 'X8o9b3EbmM3k4KAf5'
 
+local DoorEvent = ReplicatedStorage:WaitForChild("DoorEvent")
+
+local SCPFID,FPColor = 3944196,BrickColor.new('Ghost grey')
+local DEAID,DEAColor = 4155040,BrickColor.new('Storm blue')
+local ADColor = BrickColor.new('Mulberry')
+local ECID,ECColor = 4216638,BrickColor.new('Earth green')
+--local MaDID,MaDColor = 4142275,BrickColor.new('')
+local ETID,ETColor = 4408282,BrickColor.new('Cool yellow')
+local MDID, MDColor = 3989770,BrickColor.new('Cyan')
+local ISDID,ISDColor = 4128684,BrickColor.new('Dusty Rose')
+local ScDID,ScDColor = 4128217,BrickColor.new('Bright blue') 
+local SDID,SDColor = 4128212,BrickColor.new('Smoky grey')
+local IAID,IAColor = 4205417,BrickColor.new('Crimson')
+local MTFID,MTFColor = 4166008,BrickColor.new('Navy blue')
+--local GOCID,GOCColor = 4106612,BrickColor.new('Cyan')
+local CIColor = BrickColor.new('Black')
+local CDColor = BrickColor.new('Bright orange')
+--local RRTColor = BrickColor.new('Cocoa')
+
 function GetPlayerCount()
 	local PlayerCount = 0 
 	for i,v in pairs(PlayerTable) do
@@ -16,7 +35,7 @@ end
 function GetDataStore(Player,Key)
 	local DataStore = DataStorage:GetOrderedDataStore(Key)
 	local Data = nil
-	local UserCreditsKey = Player.PlayerId
+	local PlayerId = Player.UserId
 	pcall(function()
 		Data = DataStore:GetAsync(PlayerId)
 	end)
@@ -27,20 +46,129 @@ function GetDataStore(Player,Key)
 		return Data
 	end
 end
-function WriteDataStore(Player,Key)
-	local DataStore = 
+function WriteDataStore(Player,Key,Data)
+	local PlayerId = Player.UserId
+	local DataStore = DataStorage:GetOrderedDataStore(Key)
+	if Data then
+		DataStore:SetAsync(PlayerId,Data)
+	end
 end
 Players.PlayerAdded:Connect(function(Player)
 	local PlayerCount = GetPlayerCount()
-	local CreditsCount = GetPlayerCount(Player,CreditsKey)
+	local CreditsCount = GetDataStore(Player,CreditsKey)
+	local Number = math.random(0,9999)
+	Number = string.format("%04d",Number)
+	Player.CharacterAdded:Connect(function(Char)
+		local NewGui = script:WaitForChild("BillboardGui",10):Clone()
+		local GroupRank = NewGui.GroupRank
+		local Name = NewGui.NameTag
+		local Misc = NewGui.MiscText
+
+		Char.Humanoid.HealthDisplayType = Enum.HumanoidHealthDisplayType.AlwaysOff
+		Char.Humanoid.NameDisplayDistance = Enum.HumanoidDisplayDistanceType.None
+		Name.Text = Player.Name
+		Name.TextColor3 = Player.TeamColor.Color
+		Misc.TextColor3 = Player.TeamColor.Color
+		NewGui.Parent = Char.Head
+		GroupRank.Text = Player:GetRoleInGroup(SCPFID)
+		--Team Tags
+		if Player.TeamColor == CDColor then
+			Name.TextColor3 = Name.PlaceholderColor3
+			Misc.TextColor3 = Name.PlaceholderColor3
+			Misc.Visible = true
+			Misc.Text = 'D-'..Number
+		elseif Player.TeamColor == DEAColor then
+			Misc.Visible = true
+			Misc.Text = Player:GetRoleInGroup(DEAID)
+		elseif Player.TeamColor == ECColor then
+			Misc.Visible = true
+			Misc.Text = Player:GetRoleInGroup(ECID)
+		--[[elseif Player.TeamColor == MaDColor then
+			Misc.Visible = true 
+			Misc.Text = Player:GetRoleInGroup(MaDID)]]
+		elseif Player.TeamColor == ETColor then
+			Misc.Visible = true 
+			Misc.Text = Player:GetRoleInGroup(ETID)
+		elseif Player.TeamColor == MDColor then
+			Misc.Visible = true
+			Misc.Text = Player:GetRoleInGroup(MDID)
+		elseif Player.TeamColor == ISDColor then
+			Name.Text = '[DATA-EXPUNGED]'
+			Misc.Visible = true
+			Misc.Text = Player:GetRoleInGroup(ISDID)
+		elseif Player.TeamColor == ScDColor then
+			Misc.Visible = true
+			Misc.Text = Player:GetRoleInGroup(ScDID)
+		elseif Player.TeamColor == SDColor then
+			Misc.Visible = true
+			Misc.Text = Player:GetRoleInGroup(SDID)
+		elseif Player.TeamColor == IAColor then
+			Name.Text = '[REDACTED]'
+			Misc.Visible = true
+			Misc.Text = Player:GetRoleInGroup(IAID)
+		elseif Player.TeamColor == MTFColor then
+			Misc.Visible = true 
+			Misc.Text = Player:GetRoleInGroup(MTFID)
+		elseif Player.TeamColor == CIColor then
+			Misc.Visible = false
+			GroupRank.Text = '[UNIDENTIFIED-OPERATIVE]'
+		--[[elseif Player.TeamColor == GOCColor then
+			Misc.Visible = true
+			Misc.Text = Player:GetRoleInGroup(GOCID)]]
+		end
+		
+		--Custom Player Tags
+		if Player.UserId == 88097203 then --O5-A
+			Name.Text = 'The Administrator'
+			Name.TextColor = BrickColor.new('Really black')
+			Name.Size = UDim2.new(1,0,0.6,0)
+			Misc.Visible = false
+			GroupRank.Visible = false
+			Name.TextColor3 = Color3.fromRGB(0,0,0)
+		elseif Player.UserId == 54427305 then --O5-X
+			Name.Text = '"The White Death"'
+			GroupRank.Text = 'The Executive Overseer'
+		elseif Player.UserId == 531053528 then --O5-1
+			Name.Text = '"Deus Ex Machina"'
+			GroupRank.Text = 'O5-1 | ISD'
+		elseif Player.UserId == 0 then --O5-2
+			Name.Text = '"Authoritarian"'
+			GroupRank.Text = 'O5-2 | EC'
+		elseif Player.UserId == 0 then --O5-3
+			Name.Text = '"Deus Ex Machina"'
+			GroupRank.Text = 'O5-3 | IA'
+		elseif Player.UserId == 0 then --O5-4
+			Name.Text = '"The White Death"'
+			GroupRank.Text = 'O5-4 | MTF'
+		elseif Player.UserId == 0 then --O5-5
+			GroupRank.Text = 'O5-5 | DEA'
+		elseif Player.UserId == 0 then --O5-6
+			Name.Text = '"Peacekeeper"'
+			GroupRank.Text = 'O5-6 | MaD'
+		elseif Player.UserId == 0 then --O5-7
+			GroupRank.Text = 'O5-7 | E&T'
+		elseif Player.UserId == 0 then --O5-8
+			Name.Text = '"The Russian"'
+			GroupRank.Text = 'O5-8 | ScD' 
+		elseif Player.UserId == 309190129 then --O5-9
+			Name.Text = '"The Law"'
+			GroupRank.Text = 'O5-9 | SD'
+		elseif Player.UserId == 0 then --O5-10
+			Name.Text = '"Ace"'
+			GroupRank.Text = 'O5-10 | MD'
+		end
+	end)
 	local PlayerInfo = {[Player.Name] = {CreditsCount,Player}}
 	table.insert(PlayerTable,PlayerCount,PlayerInfo)
-	
 end)
 Players.PlayerRemoving:Connect(function(Player)
 	local Data = nil
 	for i,v in pairs(PlayerTable) do
-		
+		if i == Player.Name then
+			Data = v[1]
+		end
 	end
+	WriteDataStore(Player,CreditsKey,Data)
 	table.remove(PlayerTable[Player.Name])
 end)
+
