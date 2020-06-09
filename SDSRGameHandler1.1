@@ -166,21 +166,24 @@ Players.PlayerAdded:Connect(function(Player)
 				
 				
 			local CharacterStats = Instance.new('Folder')
-			local Stamina = Instance.new('IntValue')
-			local Mana = Instance.new('IntValue')
+			local MaxStamina = Instance.new('IntValue')
+			local MaxMana = Instance.new('IntValue')	
+				
+				
 				
 			CharacterStats.Name = 'CharacterStats'
 			CharacterStats.Parent = Character
 				
-			Stamina.Name = 'Stamina'
-			Stamina.Parent = CharacterStats
-			Stamina.Value = 100 +( 0.2 *(v8-5))
+			MaxStamina.Name = 'Stamina'
+			MaxStamina.Parent = CharacterStats
+			MaxStamina.Value = 100 +( 1 *(v8-5))
+			
 				
-			Mana.Name = 'Mana'
-			Mana.Parent = CharacterStats
-			Mana.Value = 100
+			MaxMana.Name = 'Mana'
+			MaxMana.Parent = CharacterStats
+			MaxMana.Value = 100 +( 1 *(v9-5))
 				
-			local Race = PlayerData['Race'..v1]
+		
 				
 			if v2 == 'Female' then
 				local NewUpperTorso = FemalePreset.UpperTorso:Clone()
@@ -206,9 +209,10 @@ Players.PlayerAdded:Connect(function(Player)
 				
 			
 			for i,v in pairs(CharacterSizeAttributes) do
-				Character.Humanoid[v].Value = Character.Humanoid[v].Value*RaceSizeModule[v7][i]
+				Character.Humanoid[v].Value = Character.Humanoid[v].Value * RaceSizeModule[v7][i]
 			end
-				
+			
+			
 				
 				
 			Character.Humanoid.Died:Connect(function()
